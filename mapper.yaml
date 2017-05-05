@@ -1,0 +1,4 @@
+- source: foo
+  dest: fuu
+- source: bar.one
+  dest: one
