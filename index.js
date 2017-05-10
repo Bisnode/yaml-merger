@@ -57,6 +57,9 @@ function transformYaml(source, mapper) {
     log('transformYaml started');
     var destination = {};
     mapper.forEach((map, index) => {
+      if(isVaildMap(map)) {
+        destination = mapValue(source, map, destination);
+      }
       isVaildMap(map)
         .then(() => {
           return mapValue(source, map, destination);
@@ -83,9 +86,7 @@ function isVaildMap(map) {
   });
 }
 
-function mapValue(source, map, destination) {
-  return new Promise((resolve, reject) => {
+function mapValue(source, map, destination = {}) {
     destination[map.to] = source[map.from];
-    resolve(destination);
-  });
+    return destination;
 }
