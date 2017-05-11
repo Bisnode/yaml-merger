@@ -1,4 +1,6 @@
-- source: foo
-  dest: fuu
-- source: bar.one
-  dest: one
+- from: foo
+  to: fuu
+- from: bar.one
+  to: one
+- from: bar.two
+  to: deep.deeper.two

@@ -1,7 +1,8 @@
 'use strict';
 
-const fs   = require('fs');
+const fs = require('fs');
 const meow = require('meow');
+const objectMapper = require('object-mapper');
 const yaml = require('js-yaml');
 
 const cli = meow(`
@@ -35,7 +36,14 @@ Promise.all([
   readYamlFile(mapperFileName)
 ])
 .then(content => {
-  return transformYaml(content[0], content[1]);
+  const source = content[0],
+        mapper = content[1];
+  return validateMapper(mapper).then( () => { 
+    return transformYaml(source, mapper)
+  });
+})
+.then(result => {
+  log(JSON.stringify(result));
 })
 .catch(console.error);
 
@@ -52,41 +60,47 @@ function readYamlFile(fileName) {
   });
 }
 
+function validateMapper(mapper) {
+  if ( ! Array.isArray(mapper)) {
+    const content = JSON.stringify(mapper);
+    return Promise.reject(`Mapper object is not an array. (it's content: ${content} )`);
+  }
+
+  var mapItemPromises = [];
+  mapper.forEach((map, index) => {
+    mapItemPromises.push(isValidMap(map));
+  });
+  return Promise.all(mapItemPromises);
+}
+
 function transformYaml(source, mapper) {
   return new Promise((resolve, reject) => {
-    log('transformYaml started');
-    var destination = {};
+    var output = {};
     mapper.forEach((map, index) => {
-      if(isVaildMap(map)) {
-        destination = mapValue(source, map, destination);
-      }
-      isVaildMap(map)
-        .then(() => {
-          return mapValue(source, map, destination);
-        })
-        .then(newDest => {
-          destination = newDest;
-        })
-        .catch(err => {
-          reject(`Error when mapping item nr ${index+1}: ${err}`);
-        });
+      output = mapValue(source, map, output);
     });
+    resolve(output);
   });
 }
 
-function isVaildMap(map) {
+function isValidMap(map) {
   return new Promise((resolve, reject) => {
-    if(typeof map.to == undefined) {
-      reject(`"to" is not defined`);
-    }
-    if(typeof map.from == undefined) {
-      reject(`from is not defined`);
-    }
+    const jsonMap = JSON.stringify(map);
+    log(`validating map: ${jsonMap}`);
+
+    ['to', 'from'].forEach( required => {
+      if( ! required in map) {
+        reject(`'${required}' is not defined in map: ${jsonMap}`);
+      }
+    });
+
     resolve(map);
   });
 }
 
 function mapValue(source, map, destination = {}) {
-    destination[map.to] = source[map.from];
-    return destination;
+  if( ! map.from in source) {
+    log(`Could not find key '${map.from}' in source file.`);
+  }
+  return objectMapper(source, destination, {[map.from]: map.to});
 }
