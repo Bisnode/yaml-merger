@@ -2,7 +2,7 @@
   "name": "yaml-mapper",
   "version": "1.0.0",
   "description": "Transforms yaml to new yaml based on mapping yaml.",
-  "main": "index.js",
+  "main": "cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,6 +12,7 @@
   "author": "Lars Modig <lars.modig@bisnode.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
+    "basic-logger": "^0.4.4",
     "js-yaml": "^3.8.3",
     "meow": "^3.7.0",
     "object-mapper": "^3.0.1"
