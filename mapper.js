@@ -41,7 +41,7 @@ function isValidMap(map) {
     log.info(`validating map: ${jsonMap}`);
 
     ['to', 'from'].forEach( required => {
-      if( ! required in map) {
+      if( ! (required in map)) {
         reject(`'${required}' is not defined in map: ${jsonMap}`);
       }
     });

@@ -1,7 +1,0 @@
-foo: some string
-bar:
-    one: it's a one
-    two: it's a two
-list:
-    - three
-    - four

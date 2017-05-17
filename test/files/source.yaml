@@ -1,0 +1,10 @@
+keyA: aValue
+keyDeep:
+  a: deepA
+  b: deepB
+  cDeeper:
+    a: deeperA
+keyArray: 
+- itemOne
+- itemTwo
+- itemThree
