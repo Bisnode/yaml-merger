@@ -3,6 +3,8 @@
 const m = require('./mapper');
 const meow = require('meow');
 const Logger = require('basic-logger');
+Logger.setLevel('error', true);
+const log = new Logger();
 
 const cli = meow(`
     Usage
@@ -48,12 +50,6 @@ Promise.all([
   );
 })
 .then(result => {
-  log(JSON.stringify(result));
+  log.info(JSON.stringify(result));
 })
 .catch(console.error);
-
-function log(text) {
-  if(cli.flags.v) {
-    console.log(text);
-  }
-}
