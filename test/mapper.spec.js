@@ -88,6 +88,32 @@ describe("transformYaml", () => {
     ).should.become({newKeyArray: sourceExample.keyArray});
   });
 
+  it("should be able to pick a deep key", () => {
+    return mapper.transformYaml(
+      sourceExample,
+      [{from: 'keyDeep.cDeeper', to: 'newKeyDeep.nDeeper'}]
+    ).should.become({
+      newKeyDeep: {
+        nDeeper: sourceExample.keyDeep.cDeeper
+      }
+    });
+  });
+
+  it("should be able to transfom with multiple maps ", () => {
+    return mapper.transformYaml(
+      sourceExample,
+      [
+        {from: 'keyA', to: 'newKeyA'},
+        {from: 'keyDeep', to: 'newKeyDeep'},
+        {from: 'keyArray', to: 'newKeyArray'}
+      ]
+    ).should.become({
+      newKeyA: sourceExample.keyA,
+      newKeyDeep: sourceExample.keyDeep,
+      newKeyArray: sourceExample.keyArray
+    });
+  });
+
 });
 
 describe("readYamlFile", () => {
