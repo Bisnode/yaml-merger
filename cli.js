@@ -1,5 +1,6 @@
 'use strict';
 
+const jsYaml = require('js-yaml');
 const m = require('./mapper');
 const meow = require('meow');
 const Logger = require('basic-logger');
@@ -29,10 +30,9 @@ if(cli.flags.v) {
 
 const sourceFileName = cli.input[0];
 const mapperFileName = cli.input[1];
+let outputFileName = undefined;
 if(cli.input[2]) {
-  const outputFileName = cli.input[2];
-} else {
-  const outputFileName = undefined;
+  outputFileName = cli.input[2];
 }
 
 
@@ -50,6 +50,11 @@ Promise.all([
   );
 })
 .then(result => {
+  if(outputFileName) {
+    //write yaml to file
+  } else {
+    console.log(jsYaml.safeDump(result));
+  }
   log.info(JSON.stringify(result));
 })
 .catch(console.error);

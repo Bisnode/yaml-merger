@@ -1,6 +1,6 @@
-- from: foo
-  to: fuu
-- from: bar.one
-  to: one
-- from: bar.two
-  to: deep.deeper.two
+- from: keyA
+  to: newKeyA
+- from: keyDeep
+  to: newDeepKey
+- from: keyArray
+  to: newKeyArray
