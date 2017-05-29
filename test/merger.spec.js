@@ -10,12 +10,14 @@ const merger = require('../merger');
 
 describe("readYamlFile", () => {
 
+  const testFileName = "test/testfileA.yaml"
+
   it("should read a Yaml file", () => {
-    return merger._readYamlFile("test/testfile.yaml");
+    return merger._readYamlFile(testFileName);
   });
 
   it("should read the right content", () => {
-    return merger._readYamlFile("test/testfile.yaml").should.become({
+    return merger._readYamlFile(testFileName).should.become({
       keyA: 'aValue',
       keyDeep: {
         a: "deepA",
