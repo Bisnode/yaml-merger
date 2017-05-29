@@ -1,7 +1,7 @@
 {
-  "name": "yaml-mapper",
+  "name": "yaml-merger",
   "version": "1.0.0",
-  "description": "Transforms yaml to new yaml based on mapping yaml.",
+  "description": "Merge 2 yaml files.",
   "main": "cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,8 +15,7 @@
     "basic-logger": "^0.4.4",
     "deepmerge": "^1.3.2",
     "js-yaml": "^3.8.3",
-    "meow": "^3.7.0",
-    "object-mapper": "^3.0.1"
+    "meow": "^3.7.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

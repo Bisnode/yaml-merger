@@ -1,6 +1,0 @@
-- from: keyA
-  to: newKeyA
-- from: keyDeep
-  to: newDeepKey
-- from: keyArray
-  to: newKeyArray
