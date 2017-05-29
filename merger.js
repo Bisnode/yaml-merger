@@ -1,13 +1,51 @@
 'use strict';
 
 const deepmerge = require('deepmerge');
+const fs = require('fs');
+const jsYaml = require('js-yaml');
 const Logger = require('basic-logger');
 const log = new Logger();
 
 module.exports = {
-  merge: merge
+  mergeFiles: mergeFiles,
+  _mergeObj: mergeObj,
+  _readYamlFile: readYamlFile,
+  _writeYamlFile: writeYamlFile
 }
 
-function merge(objA, objB) {
+function mergeObj(objA, objB) {
   return deepmerge(objA, objB);
+}
+
+function mergeFiles(fileAName, fileBName, outputFileName) {
+  return Promise.all([
+    readYamlFile(fileAName),
+    readYamlFile(fileBName)
+  ])
+  .then(content => {
+    return merger.merge(content[0], content[1]);
+  })
+  .then(result => {
+    if(outputFileName) {
+      //write yaml to file
+    } else {
+      console.log(jsYaml.safeDump(result));
+    }
+    log.info(JSON.stringify(result));
+  })
+  .catch(console.error);
+}
+
+function readYamlFile(fileName) {
+  return new Promise((resolve, reject) => {
+    log.info(`Reading ${fileName}`);
+    resolve(jsYaml.safeLoad(fs.readFileSync(fileName, 'utf8')));
+  });
+}
+
+function writeYamlFile(fileName, data) {
+  return new Promise((resolve, reject) => {
+    log.info(`Writing ${fileName}`);
+    resolve(fs.writeFileSync(fileName, jsYaml.safeDump(data), 'utf8'));
+  });
 }

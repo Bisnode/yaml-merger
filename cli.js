@@ -1,7 +1,7 @@
 'use strict';
 
-const jsYaml = require('js-yaml');
-const m = require('./mapper');
+
+const merger = require('./merger');
 const meow = require('meow');
 const Logger = require('basic-logger');
 Logger.setLevel('error', true);
@@ -9,7 +9,7 @@ const log = new Logger();
 
 const cli = meow(`
     Usage
-      $ node index.js <source.yaml> <mapper.yaml> [output.yaml]
+      $ node index.js <fileA.yaml> <fileB.yaml> [output.yaml]
 
     Options
       -v          Verbose console logging
@@ -28,33 +28,15 @@ if(cli.flags.v) {
   Logger.setLevel('debug');
 }
 
-const sourceFileName = cli.input[0];
-const mapperFileName = cli.input[1];
+const fileAName = cli.input[0];
+const fileBName = cli.input[1];
 let outputFileName = undefined;
 if(cli.input[2]) {
   outputFileName = cli.input[2];
 }
 
-
-Promise.all([
-  m.readYamlFile(sourceFileName),
-  m.readYamlFile(mapperFileName)
-])
-.then(content => {
-  const source = content[0],
-        mapper = content[1];
-  return m.validateMapper(mapper)
-    .then( () => {
-      return m.transformYaml(source, mapper)
-    }
-  );
-})
-.then(result => {
-  if(outputFileName) {
-    //write yaml to file
-  } else {
-    console.log(jsYaml.safeDump(result));
-  }
-  log.info(JSON.stringify(result));
-})
-.catch(console.error);
+merger.mergeFiles(fileAName, fileBName, outputFileName)
+  .catch(err => {
+    log.error(err);
+    process.exit(1);
+  });

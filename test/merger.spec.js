@@ -2,13 +2,50 @@
 
 require('basic-logger').setLevel('error', true);
 const chai = require('chai').use(require('chai-as-promised'));
+const fs = require('fs');
 const expect = chai.expect;
 chai.should();
 
 const merger = require('../merger');
 
+describe("readYamlFile", () => {
 
-describe("merge", () => {
+  it("should read a Yaml file", () => {
+    return merger._readYamlFile("test/testfile.yaml");
+  });
+
+  it("should read the right content", () => {
+    return merger._readYamlFile("test/testfile.yaml").should.become({
+      keyA: 'aValue',
+      keyDeep: {
+        a: "deepA",
+        b: "deepB"
+      },
+      keyArray: [
+        "itemOne",
+        "itemTwo",
+        3
+      ]
+    });
+  });
+
+});
+
+describe("writeYamlFile", () => {
+
+  const fileOutputName = "test/testoutput.yaml";
+
+  it("should write a Yaml file", () => {
+    return merger._writeYamlFile(fileOutputName, {keyA: 'test'});
+  });
+
+  after( () => {
+    fs.unlinkSync(fileOutputName);
+  })
+
+});
+
+describe("mergeObj", () => {
   const a = { keyA: 'someValue' };
   const b = { keyB: 123 };
   const c = { keyC: { keyC1: 1, keyC2: 2 }};
@@ -16,27 +53,27 @@ describe("merge", () => {
   const l2 = [21, 22];
 
   it("merge a obj with keys", () => {
-    return merger.merge(a, b).should.deep.equal({
+    return merger._mergeObj(a, b).should.deep.equal({
       keyA: a.keyA,
       keyB: b.keyB
     });
   });
 
   it("merge a obj with keys withing keys", () => {
-    return merger.merge(a, c).should.deep.equal({
+    return merger._mergeObj(a, c).should.deep.equal({
       keyA: a.keyA,
       keyC: c.keyC
     });
   });
 
   it("merge two lists", () => {
-    return merger.merge(l1, l2).should.deep.equal(
+    return merger._mergeObj(l1, l2).should.deep.equal(
       l1.concat(l2)
     );
   });
 
   it("merge complex key and list mix", () => {
-    return merger.merge({
+    return merger._mergeObj({
       deepKeyA: a,
       aList: l1
     }, {
@@ -50,7 +87,7 @@ describe("merge", () => {
   });
 
   it("merge complex list with keys", () => {
-    return merger.merge({
+    return merger._mergeObj({
       aList: [
         {
           keyA: a.keyA,

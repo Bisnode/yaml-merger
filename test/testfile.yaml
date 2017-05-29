@@ -1,0 +1,8 @@
+keyA: aValue
+keyDeep:
+  a: deepA
+  b: deepB
+keyArray:
+- itemOne
+- itemTwo
+- 3
