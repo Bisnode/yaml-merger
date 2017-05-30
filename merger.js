@@ -23,17 +23,16 @@ function mergeFiles(fileAName, fileBName, outputFileName) {
     readYamlFile(fileBName)
   ])
   .then(content => {
-    return merger.merge(content[0], content[1]);
+    return mergeObj(content[0], content[1]);
   })
   .then(result => {
     if(outputFileName) {
-      //write yaml to file
+      writeYamlFile(outputFileName, result);
     } else {
       console.log(jsYaml.safeDump(result));
     }
     log.info(JSON.stringify(result));
-  })
-  .catch(console.error);
+  });
 }
 
 function readYamlFile(fileName) {

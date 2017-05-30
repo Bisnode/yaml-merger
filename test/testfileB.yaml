@@ -1,0 +1,5 @@
+keyA: aValue
+keyDeep:
+  a: deepX
+keyArray:
+- itemFour

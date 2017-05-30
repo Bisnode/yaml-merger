@@ -8,6 +8,41 @@ chai.should();
 
 const merger = require('../merger');
 
+
+describe("mergeFiles", () => {
+
+  const fileA = "test/testfileA.yaml"
+  const fileB = "test/testfileB.yaml"
+  const fileOutput = "test/testoutput1.yaml";
+  const expectedOutput = {
+    keyA: 'aValue',
+    keyDeep: {
+      a: "deepX",
+      b: "deepB"
+    },
+    keyArray: [
+      "itemOne",
+      "itemTwo",
+      3,
+      "itemFour"
+    ]
+  };
+
+  it("should merge and output to file", () => {
+    return merger.mergeFiles(fileA, fileB, fileOutput)
+      .then( () => {
+        return merger._readYamlFile(fileOutput)
+          .then(outputContent => {
+            return outputContent.should.deep.equal(expectedOutput);
+          });
+      });
+  });
+
+  after( () => {
+    fs.unlinkSync(fileOutput);
+  })
+});
+
 describe("readYamlFile", () => {
 
   const testFileName = "test/testfileA.yaml"
