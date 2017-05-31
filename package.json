@@ -1,8 +1,11 @@
 {
   "name": "yaml-merger",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Merge 2 yaml files.",
-  "main": "cli.js",
+  "main": "lib/cli.js",
+  "bin": {
+    "yaml-merger": "./bin/yaml-merger"
+  },
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha"
   },

@@ -6,7 +6,7 @@ const fs = require('fs');
 const expect = chai.expect;
 chai.should();
 
-const merger = require('../merger');
+const merger = require('../lib/merger');
 
 
 describe("mergeFiles", () => {
