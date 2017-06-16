@@ -27,5 +27,8 @@
     "gulp-batch": "^1.0.5",
     "gulp-mocha": "^4.3.1",
     "mocha": "^3.4.1"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
