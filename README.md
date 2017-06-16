@@ -16,11 +16,14 @@ $ yaml-merger -h
   Merge 2 yaml files.
 
   Usage
-    $ yaml-merger <fileA.yaml> <fileB.yaml> [output.yaml]
+    $ yaml-merger -i <fileA.yaml> -i <fileB.yaml> [-o output.yaml]
 
   Options
-    -v          Verbose console logging
-    -h, --help  Shows this help
+    -i, --input  Input files, define 2
+    -o, --output Output file, if omited outputs to console
+    --mergePath  Change root path in first file to be merged in
+    -v           Verbose console logging
+    -h, --help   Shows this help
 ```
 
 ## Examples
@@ -50,7 +53,7 @@ keyArray:
 
 
 ```bash
-$ yaml-merger fileA.yaml fileB.yaml 
+$ yaml-merger fileA.yaml fileB.yaml
 keyA: aValue
 keyDeep:
   a: deepX
