@@ -1,6 +1,6 @@
 {
   "name": "yaml-merger",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Merge 2 yaml files.",
   "main": "lib/cli.js",
   "bin": {

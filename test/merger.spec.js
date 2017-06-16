@@ -65,6 +65,32 @@ describe("mergeFiles", () => {
       });
   });
 
+  it("should merge with specified mergePath with array and output to file", () => {
+    const expectedOutput = {
+      keyA: 'aValue',
+      keyDeep: {
+        a: "deepA",
+        b: "deepB"
+      },
+      keyArray: [
+        "itemOne",
+        "itemTwo",
+        {
+          keyA: 'aValue',
+          keyDeep: { a: "deepX" },
+          keyArray: [ "itemFour" ]
+        }
+      ]
+    };
+    return merger.mergeFiles(fileA, fileB, {outputFileName: fileOutput, mergePath: 'keyArray.2'})
+      .then( () => {
+        return merger._readYamlFile(fileOutput)
+          .then(outputContent => {
+            return outputContent.should.deep.equal(expectedOutput);
+          });
+      });
+  });
+
   afterEach( () => {
     fs.unlinkSync(fileOutput);
   })
