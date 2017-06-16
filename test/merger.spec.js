@@ -14,22 +14,23 @@ describe("mergeFiles", () => {
   const fileA = "test/testfileA.yaml"
   const fileB = "test/testfileB.yaml"
   const fileOutput = "test/testoutput1.yaml";
-  const expectedOutput = {
-    keyA: 'aValue',
-    keyDeep: {
-      a: "deepX",
-      b: "deepB"
-    },
-    keyArray: [
-      "itemOne",
-      "itemTwo",
-      3,
-      "itemFour"
-    ]
-  };
 
   it("should merge and output to file", () => {
-    return merger.mergeFiles(fileA, fileB, fileOutput)
+    const expectedOutput = {
+      keyA: 'aValue',
+      keyDeep: {
+        a: "deepX",
+        b: "deepB"
+      },
+      keyArray: [
+        "itemOne",
+        "itemTwo",
+        3,
+        "itemFour"
+      ]
+    };
+
+    return merger.mergeFiles(fileA, fileB, {outputFileName: fileOutput})
       .then( () => {
         return merger._readYamlFile(fileOutput)
           .then(outputContent => {
@@ -38,7 +39,33 @@ describe("mergeFiles", () => {
       });
   });
 
-  after( () => {
+  it("should merge with specified mergePath and output to file", () => {
+    const expectedOutput = {
+      keyA: 'aValue',
+      keyDeep: {
+        a: {
+          keyA: 'aValue',
+          keyDeep: { a: "deepX" },
+          keyArray: [ "itemFour" ]
+        },
+        b: "deepB"
+      },
+      keyArray: [
+        "itemOne",
+        "itemTwo",
+        3
+      ]
+    };
+    return merger.mergeFiles(fileA, fileB, {outputFileName: fileOutput, mergePath: 'keyDeep.a'})
+      .then( () => {
+        return merger._readYamlFile(fileOutput)
+          .then(outputContent => {
+            return outputContent.should.deep.equal(expectedOutput);
+          });
+      });
+  });
+
+  afterEach( () => {
     fs.unlinkSync(fileOutput);
   })
 });
